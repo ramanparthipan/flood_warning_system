@@ -38,3 +38,26 @@ class MonitoringStation:
         d += "   river:         {}\n".format(self.river)
         d += "   typical range: {}".format(self.typical_range)
         return d
+
+    def typical_range_consistent(self):
+        "This method checks the consistency of station data with typical high/low values"
+        temp = self.typical_range
+        math_range = float(temp[1])-float(temp[0])
+        if math_range < 0 or not self.typical_range:
+            return False
+        else:
+            return True
+
+    def inconsistent_typical_range_stations(stations):
+        inconsistent_stations = []
+        for station in stations:
+            if type(station.typical_range) == type([].sort()):
+                inconsistent_stations.append(station)
+            else:
+                if not MonitoringStation.typical_range_consistent(station):
+                    inconsistent_stations.append(station)
+                else:
+                    pass
+        return inconsistent_stations
+
+

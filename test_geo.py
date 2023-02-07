@@ -1,5 +1,7 @@
 from floodsystem.stationdata import build_station_list
 from floodsystem.geo import *
+from floodsystem.geo import stations_by_river
+from floodsystem.geo import rivers_with_station
 
 
 def test_stations_by_distance():
@@ -25,3 +27,30 @@ def test_stations_by_river():
 
 if __name__ == "__main__":
     test_stations_by_river()
+
+def rivers_by_station_number():
+    s_id = "test-s-id"
+    m_id = "test-m-id"
+    label = "some station"
+    coord = (6.0, 4.0)
+    trange = None
+    river = "River X"
+    town = "My Town"
+    s = MonitoringStation(s_id, m_id, label, coord, trange, river, town)
+    river = "River X"
+    s1 = MonitoringStation(s_id, m_id, label, coord, trange, river, town)
+    river = "River Y"
+    s2 = MonitoringStation(s_id, m_id, label, coord, trange, river, town)
+    river = "River Y"
+    s3 = MonitoringStation(s_id, m_id, label, coord, trange, river, town)
+    river = "River Z"
+    s4 = MonitoringStation(s_id, m_id, label, coord, trange, river, town)
+    stations = [s, s1,s2,s3,s4]
+    N = 2
+    output_list = geo.rivers_by_station_number(stations, N)
+
+    assert len(output_list) == 3
+
+    for i in range(1, len(output_list)):
+        assert output_list[i][1] >= output_list[i-1][1]
+
