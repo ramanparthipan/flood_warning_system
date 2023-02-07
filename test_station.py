@@ -62,5 +62,5 @@ def test_inconsistent_typical_range_stations():
 v = test_inconsistent_typical_range_stations()
 
 assert type(v) == list
-assert v == ['Test 2', 'Test3']
+assert v == ['Test 2', 'Test 3']
 
