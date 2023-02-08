@@ -7,4 +7,4 @@ inconsistent_stations = MonitoringStation.inconsistent_typical_range_stations(al
 for station in inconsistent_stations:
     output.append(station.name)
 
-print(output)
+print(sorted(output))
