@@ -4,29 +4,46 @@ from floodsystem.geo import stations_by_river
 from floodsystem.geo import rivers_with_station
 
 
+# Note, if tests fail, it could be because the real time data has changed so the values that are being compared
+# aren't valid anymore
+
 def test_stations_by_distance():
     stations = build_station_list()
-    x = stations_by_distance(stations[:3], (52.2053, 0.1218))
-    print(x)
+    x = stations_by_distance(stations, (52.2053, 0.1218))
+    #print(x)
+    #print(x[0][0].name)
+    assert x[0][0].name == "Cambridge Jesus Lock"
+    
 
 def test_stations_within_radius():
+    #stations = build_station_list()
+    #x = stations_within_radius(stations, (52.2053, 0.1218), 7)
+    #print(x)
+
     stations = build_station_list()
-    x = stations_within_radius(stations, (52.2053, 0.1218), 7)
-    print(x)
-    print(len(x))
+    stations_within_radius_list = stations_within_radius(stations, (52.2053, 0.1218), 10)
+    station_names = []
+    for station in stations_within_radius_list:
+        station_names.append(station.name)
+    sorted_station_names = sorted(station_names)
+    print(sorted_station_names)
+    assert sorted_station_names[0] == 'Bin Brook'
+    
 
 def test_rivers_with_station():
     stations = build_station_list()
-    x = rivers_with_station(stations)
-    print(x)
+    rivers_with_station_set = rivers_with_station(stations)
+    assert sorted(list(rivers_with_station_set))[0] == "Addlestone Bourne"
 
 def test_stations_by_river():
     stations = build_station_list()
-    x = stations_by_river(stations[:3])
-    print(x)
+    stations_by_river_dict = stations_by_river(stations)
+    river_aire_station_names = []
+    for station in stations_by_river_dict['River Aire']:
+        river_aire_station_names.append(station.name)
+    #print(sorted(river_aire_station_names))
+    assert sorted(river_aire_station_names)[0] == "Airmyn"
 
-if __name__ == "__main__":
-    test_stations_by_river()
 
 def rivers_by_station_number():
     s_id = "test-s-id"
@@ -54,3 +71,6 @@ def rivers_by_station_number():
     for i in range(1, len(output_list)):
         assert output_list[i][1] >= output_list[i-1][1]
 
+if __name__ == "__main__":
+    test_stations_by_river()
+    
