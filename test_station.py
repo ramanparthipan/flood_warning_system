@@ -64,3 +64,33 @@ v = test_inconsistent_typical_range_stations()
 assert type(v) == list
 assert v == ['Test 2', 'Test 3']
 
+def test_relative_water_level():
+    """Tests for the function relative_water_level"""
+    station = MonitoringStation(None, None, None, None, (1.0, 2.0), None, None)
+    'Tests that the function returns None when there is no latest level'
+    assert station.relative_water_level() == None
+    'Tests that the function gives an expected output'
+    station.latest_level = 1.5
+    assert station.relative_water_level() == 0.5
+    'Tests that the function gives an expected output'
+    station.latest_level = 2.0
+    assert station.relative_water_level() == 1.0
+    'Tests that the function returns None when the typical range is inconsistent'
+    station.typical_range = (2.0, 1.0)
+    assert station.relative_water_level() == None
+
+def test_stations_level_over_threshold():
+    """tests requirements of stations level over threshold"""
+    # creates a list of stations
+    stations = []
+    for level in [1, None, 2, 3, 'b', 5, 6, 7]:
+        x = MonitoringStation(None, None, None, None, (1, 3), None, None)
+        x.latest_level = level
+        stations.append(x)
+    stations[-1].typical_range = (3, 1)
+    over_threshold = stations_level_over_threshold(stations, 1)
+    # checks for the expected length of the list returned
+    assert len(over_threshold) == 2
+    # checks the ordering of list
+    assert over_threshold[0][1] == 2.5
+    assert over_threshold[1][1] == 2
